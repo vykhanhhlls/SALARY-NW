@@ -11,50 +11,54 @@
     .employee-card:hover {background: #1976d2;}
     .add-btn {background: #4caf50; margin-top: 20px;}
     .add-btn:hover {background: #388e3c;}
-    .modal {display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center;}
-    .modal-content {background: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 500px; text-align: center;}
-    input {width: 100%; padding: 15px; margin: 15px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 18px;}
+    .modal {display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000;}
+    .modal-content {background: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 600px; text-align: center; max-height: 90vh; overflow-y: auto;}
+    input {width: 100%; padding: 15px; margin: 15px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 18px; box-sizing: border-box;}
     button {background: #0d47a1; color: white; padding: 15px 30px; border: none; border-radius: 10px; font-size: 18px; cursor: pointer;}
-    .close {float: right; font-size: 30px; cursor: pointer;}
+    .close {float: right; font-size: 30px; cursor: pointer; color: #aaa;}
+    .close:hover {color: #000;}
     table {width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 6px 20px rgba(0,0,0,0.1); border-radius: 12px; overflow: hidden;}
     th {background: #0d47a1; color: white; padding: 16px;}
     td {padding: 14px; border-bottom: 1px solid #eee;}
     tr:nth-child(even) {background: #f9fcff;}
     .amount {text-align: right; font-weight: bold; color: #c62828;}
     .info {background: #e8f5e8; padding: 18px; border-radius: 12px; margin: 25px 0; text-align: center; font-size: 19px; font-weight: bold; color: #2e7d32;}
-    .error {background: #ffebee; color: #c62828; padding: 20px; border-radius: 12px; margin: 20px 0;}
+    .error, .no-data {background: #ffebee; color: #c62828; padding: 20px; border-radius: 12px; margin: 20px 0;}
+    .loading {background: #e3f2fd; color: #1565c0; padding: 20px; border-radius: 12px; margin: 20px 0;}
+    .note {font-size: 15px; color: #666; margin-top: 10px;}
   </style>
 </head>
 <body>
   <h1>Tra cứu lương OneFit</h1>
   
   <div class="employee-list" id="employeeList">
-    <!-- Các card sẽ được thêm bằng JS -->
+    <!-- JS sẽ tự thêm -->
   </div>
 
-  <!-- Modal nhập mật khẩu và hiển thị kết quả -->
   <div class="modal" id="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
-      <h2 id="modalTitle">Nhập mật khẩu cho <span id="currentName"></span></h2>
+      <h2 id="modalTitle">Nhập thông tin</h2>
       <input type="password" id="passwordInput" placeholder="Nhập mật khẩu cá nhân">
-      <button onclick="checkPassword()">Xác nhận</button>
+      <input type="text" id="thangInput" placeholder="Nhập tháng (YYYYMM) - để trống xem tháng hiện tại (12/2025)">
+      <div class="note">Nhấn Enter cũng xác nhận được</div>
+      <button onclick="checkPassword()">XÁC NHẬN</button>
       <div id="salaryResult"></div>
     </div>
   </div>
 
 <script>
-// Danh sách nhân viên và mật khẩu (bạn thêm/sửa ở đây, mật khẩu ví dụ thôi, đổi thành thật)
+// Danh sách nhân viên - thêm/sửa mật khẩu thật ở đây
 const employees = [
-  { id: "V3167859", name: "Nguyễn Thi Lan Hương", password: "matkhauA123" },
-  { id: "V3113225", name: "Nguyễn Quang Anh", password: "matkhauB456" },
-  { id: "V3120797", name: "Triệu Thị Lan", password: "matkhauC789" },
-  // Thêm nhiều hơn: { id: "V0000004", name: "Tên D", password: "mkD" },
+  { id: "V3167859", name: "Nguyễn Thị Lan Hương", password: "matkhauLanHuong" },
+  { id: "V3113225", name: "Nguyễn Quang Anh", password: "matkhauQuangAnh" },
+  { id: "V3120797", name: "Triệu Thị Lan", password: "matkhauThiLan" },
+  // Thêm người mới ở đây
 ];
 
 let currentEmployee = null;
 
-// Tạo danh sách card
+// Tạo card nhân viên
 function renderEmployees() {
   const list = document.getElementById("employeeList");
   list.innerHTML = "";
@@ -66,21 +70,21 @@ function renderEmployees() {
     list.appendChild(card);
   });
   
-  // Thêm nút "Thêm +" nếu cần (có thể bỏ)
   const addCard = document.createElement("div");
   addCard.className = "employee-card add-btn";
   addCard.textContent = "Thêm +";
-  addCard.onclick = () => alert("Chức năng thêm nhân viên mới (nếu cần phát triển thêm)");
+  addCard.onclick = () => alert("Liên hệ admin để thêm nhân viên mới");
   list.appendChild(addCard);
 }
 
 function openModal(emp) {
   currentEmployee = emp;
-  document.getElementById("modalTitle").innerHTML = `Nhập mật khẩu cho <strong>${emp.name} ${emp.id}</strong>`;
-  document.getElementById("currentName").textContent = `${emp.name} ${emp.id}`;
+  document.getElementById("modalTitle").textContent = `Tra cứu lương: ${emp.name} ${emp.id}`;
   document.getElementById("passwordInput").value = "";
+  document.getElementById("thangInput").value = "";
   document.getElementById("salaryResult").innerHTML = "";
   document.getElementById("modal").style.display = "flex";
+  document.getElementById("passwordInput").focus();
 }
 
 function closeModal() {
@@ -88,49 +92,76 @@ function closeModal() {
 }
 
 async function checkPassword() {
-  const inputPass = document.getElementById("passwordInput").value;
-  if (inputPass === currentEmployee.password) {
-    await fetchSalary(currentEmployee.id);
-  } else {
-    document.getElementById("salaryResult").innerHTML = '<div class="error">Mật khẩu sai! Thử lại.</div>';
+  const inputPass = document.getElementById("passwordInput").value.trim();
+  const thangInput = document.getElementById("thangInput").value.trim();
+  const resultDiv = document.getElementById("salaryResult");
+
+  if (inputPass !== currentEmployee.password) {
+    resultDiv.innerHTML = '<div class="error">Mật khẩu sai! Thử lại.</div>';
+    return;
   }
+
+  // Xử lý tháng
+  let isCurrentMonth = (thangInput === "");
+  let thangUse = "";
+  let thangHienThi = "";
+
+  if (isCurrentMonth) {
+    // Tháng hiện tại: 12/2025
+    const today = new Date();
+    thangUse = today.getFullYear().toString() + (today.getMonth() + 1).toString().padStart(2, '0');
+    thangHienThi = "Tháng hiện tại (" + thangUse.slice(4) + "/" + thangUse.slice(0,4) + ")";
+  } else {
+    if (!/^\d{6}$/.test(thangInput)) {
+      resultDiv.innerHTML = '<div class="error">Tháng phải đúng định dạng YYYYMM (ví dụ: 202511)</div>';
+      return;
+    }
+    thangUse = thangInput;
+    thangHienThi = thangUse.slice(4) + "/" + thangUse.slice(0,4);
+  }
+
+  await fetchSalary(currentEmployee.id, isCurrentMonth, thangUse, thangHienThi);
 }
 
-async function fetchSalary(ma) {
+async function fetchSalary(ma, isCurrentMonth, thangUse, thangHienThi) {
   const resultDiv = document.getElementById("salaryResult");
-  resultDiv.innerHTML = '<div class="loading">Đang tải lương tháng hiện tại (11/2025)...</div>';
-  
-  const thangUse = "202511"; // Tháng hiện tại, có thể thêm chọn tháng sau
-  const url = `https://esalary.one-fit.com/VN/Program/QueryReport/AjaxRequest.aspx?key=getsalarybyid&uid=${ma}&_=${Date.now()}`;
-  
+  resultDiv.innerHTML = `<div class="loading">Đang tải lương của <strong>${ma}</strong> – ${thangHienThi}...</div>`;
+
+  let url = "";
+  if (isCurrentMonth) {
+    url = `https://esalary.one-fit.com/VN/Program/QueryReport/AjaxRequest.aspx?key=getsalarybyid&uid=${ma}&_=${Date.now()}`;
+  } else {
+    url = `https://esalary.one-fit.com/VN/Program/QueryReport/AjaxRequest.aspx?key=gethistorysalary&uid=${ma}&dateid=${thangUse}&_=${Date.now()}`;
+  }
+
+  const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
+
   try {
-    const proxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(url);
-    const res = await fetch(proxy);
-    const data = await res.json();
-    const jsonText = data.contents || "";
-    
+    const res = await fetch(proxyUrl);
+    const jsonText = await res.text();
+
     if (!jsonText || jsonText.trim() === "" || jsonText.includes("error")) {
-      resultDiv.innerHTML = `<div class="error">Không có dữ liệu lương (có thể chưa cập nhật)</div>`;
+      resultDiv.innerHTML = `<div class="no-data">Không có dữ liệu lương cho <strong>${thangHienThi}</strong> (có thể chưa cập nhật hoặc tháng chưa đóng)</div>`;
       return;
     }
-    
+
     const json = JSON.parse(jsonText);
     if (!Array.isArray(json) || json.length === 0) {
-      resultDiv.innerHTML = `<div class="error">Chưa có dữ liệu lương cho tháng này</div>`;
+      resultDiv.innerHTML = `<div class="no-data">Chưa có dữ liệu lương cho ${thangHienThi}</div>`;
       return;
     }
-    
+
     const nv = json[0];
-    const ten = nv.userName || "Không rõ";
+    const ten = nv.userName || ma;
     const pb = nv.departName || "Không rõ";
     let tong = 0;
-    
+
     let table = `
-      <div class="info">${ten} • ${ma} • ${pb} • Tháng 11/2025</div>
+      <div class="info">${ten} • ${ma} • ${pb} • ${thangHienThi}</div>
       <table>
         <tr><th>STT</th><th>Mã</th><th>Khoản mục</th><th style="text-align:right;">Số tiền</th></tr>
     `;
-    
+
     json.forEach((item, i) => {
       const tien = parseFloat(item.amount || 0);
       tong += tien;
@@ -143,19 +174,24 @@ async function fetchSalary(ma) {
         </tr>
       `;
     });
-    
+
     table += `
       </table>
-      <div class="info" style="font-size:22px;">Tổng thực lãnh: ${tong.toLocaleString("vi-VN")} ₫</div>
+      <div class="info" style="font-size:24px; background:#c8e6c9;">
+        Tổng thực lãnh: ${tong.toLocaleString("vi-VN")} ₫
+      </div>
     `;
-    
+
     resultDiv.innerHTML = table;
   } catch (err) {
-    resultDiv.innerHTML = `<div class="error">Lỗi kết nối. Thử lại sau! (${err.message})</div>`;
+    resultDiv.innerHTML = `<div class="error">Lỗi kết nối. Thử refresh trang hoặc chờ vài phút.<br>Chi tiết: ${err.message}</div>`;
   }
 }
 
-// Khởi chạy
+// Nhấn Enter ở ô nào cũng xác nhận
+document.getElementById("passwordInput").addEventListener("keypress", e => { if (e.key === "Enter") checkPassword(); });
+document.getElementById("thangInput").addEventListener("keypress", e => { if (e.key === "Enter") checkPassword(); });
+
 renderEmployees();
 </script>
 </body>
