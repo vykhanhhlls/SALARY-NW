@@ -5,6 +5,7 @@
   <title>Tra cứu lương OneFit</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* Giữ nguyên toàn bộ style đẹp như phiên bản trước */
     * { box-sizing: border-box; }
     body {
       font-family: 'Poppins', sans-serif;
@@ -14,19 +15,8 @@
       background: linear-gradient(135deg, #e0f7fa, #f0f4f8);
       min-height: 100vh;
     }
-    h1 {
-      text-align: center;
-      color: #01579b;
-      margin-bottom: 50px;
-      font-weight: 700;
-      font-size: 2.5rem;
-    }
-    .employee-list {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      align-items: center;
-    }
+    h1 { text-align: center; color: #01579b; margin-bottom: 50px; font-weight: 700; font-size: 2.5rem; }
+    .employee-list { display: flex; flex-direction: column; gap: 20px; align-items: center; }
     .employee-card {
       background: rgba(255, 255, 255, 0.25);
       backdrop-filter: blur(12px);
@@ -49,26 +39,7 @@
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
       background: rgba(255, 255, 255, 0.35);
     }
-    .add-btn {
-      background: rgba(76, 175, 80, 0.3);
-      border: 1px solid rgba(76, 175, 80, 0.4);
-      color: #1b5e20;
-    }
-    .add-btn:hover {
-      background: rgba(76, 175, 80, 0.5);
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(5px);
-      justify-content: center;
-      align-items: center;
-      animation: fadeIn 0.3s ease;
-      z-index: 1000;
-    }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); justify-content: center; align-items: center; animation: fadeIn 0.3s ease; z-index: 1000; }
     @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
     .modal-content {
       background: rgba(255, 255, 255, 0.15);
@@ -85,99 +56,46 @@
       animation: slideUp 0.4s ease;
     }
     @keyframes slideUp { from {transform: translateY(50px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
-    .close {
-      float: right;
-      font-size: 36px;
-      cursor: pointer;
-      color: #fff;
-      opacity: 0.7;
-    }
+    .close { float: right; font-size: 36px; cursor: pointer; color: #fff; opacity: 0.7; }
     .close:hover { opacity: 1; }
     input {
-      width: 100%;
-      padding: 16px;
-      margin: 16px 0;
-      border: none;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.3);
-      font-size: 1.1rem;
-      color: #01579b;
+      width: 100%; padding: 16px; margin: 16px 0; border: none; border-radius: 12px;
+      background: rgba(255, 255, 255, 0.3); font-size: 1.1rem; color: #01579b;
     }
     input::placeholder { color: rgba(1, 87, 155, 0.7); }
     button {
-      background: #01579b;
-      color: white;
-      padding: 16px 40px;
-      border: none;
-      border-radius: 12px;
-      font-size: 1.2rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-top: 10px;
+      background: #01579b; color: white; padding: 16px 40px; border: none; border-radius: 12px;
+      font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px;
     }
     button:hover { background: #003c72; transform: scale(1.05); }
-    table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0 10px;
-      margin-top: 20px;
-    }
-    th {
-      background: #01579b;
-      color: white;
-      padding: 16px;
-      text-align: left;
-      font-weight: 600;
-    }
-    td {
-      padding: 16px;
-      background: rgba(255, 255, 255, 0.4);
-    }
+    table { width: 100%; border-collapse: separate; border-spacing: 0 10px; margin-top: 20px; }
+    th { background: #01579b; color: white; padding: 16px; text-align: left; font-weight: 600; }
+    td { padding: 16px; background: rgba(255, 255, 255, 0.4); }
     tr td:first-child { border-radius: 12px 0 0 12px; }
     tr td:last-child { border-radius: 0 12px 12px 0; }
     .amount { text-align: right; font-weight: 600; color: #c62828; }
-    .info {
-      background: rgba(232, 245, 232, 0.7);
-      padding: 20px;
-      border-radius: 16px;
-      margin: 20px 0;
-      text-align: center;
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: #2e7d32;
-    }
-    .net-salary-row td {
-      background: rgba(200, 230, 201, 0.9) !important;
-      font-weight: 700;
-      font-size: 1.3rem;
-    }
+    .info { background: rgba(232, 245, 232, 0.7); padding: 20px; border-radius: 16px; margin: 20px 0; text-align: center; font-size: 1.2rem; font-weight: 600; color: #2e7d32; }
+    .net-salary-row td { background: rgba(200, 230, 201, 0.9) !important; font-weight: 700; font-size: 1.3rem; }
     .net-salary-desc { color: #1b5e20; }
     .net-salary-amount { color: #1b5e20; font-size: 1.5rem; }
     .error, .no-data { background: rgba(255, 235, 238, 0.8); color: #c62828; padding: 20px; border-radius: 16px; margin: 20px 0; }
-    .loading {
-      background: rgba(227, 242, 253, 0.8);
-      color: #1565c0;
-      padding: 30px;
-      border-radius: 16px;
-      margin: 20px 0;
-      text-align: center;
-      font-size: 1.2rem;
-    }
+    .loading { background: rgba(227, 242, 253, 0.8); color: #1565c0; padding: 30px; border-radius: 16px; margin: 20px 0; text-align: center; font-size: 1.2rem; }
     .note { font-size: 0.95rem; color: #555; margin-top: 10px; text-align: center; }
   </style>
 </head>
 <body>
   <h1>Tra cứu lương OneFit</h1>
   
-  <div class="employee-list" id="employeeList"></div>
+  <div class="employee-list" id="employeeList">
+    <div class="loading">Đang tải danh sách nhân viên...</div>
+  </div>
 
   <div class="modal" id="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
       <h2 id="modalTitle" style="color:white; text-align:center; margin-bottom:20px;">Tra cứu lương</h2>
       <input type="password" id="passwordInput" placeholder="Nhập mật khẩu cá nhân">
-      <input type="text" id="thangInput" placeholder="Nhập tháng (YYYYMM) - để trống xem tháng hiện tại (12/2025)">
+      <input type="text" id="thangInput" placeholder="Nhập tháng (YYYYMM) - để trống xem tháng hiện tại">
       <div class="note">Nhấn Enter cũng xác nhận được</div>
       <button onclick="checkPassword()">XÁC NHẬN</button>
       <div id="salaryResult"></div>
@@ -185,14 +103,21 @@
   </div>
 
 <script>
-// Danh sách nhân viên (thay mật khẩu thật ở đây)
-const employees = [
-  { id: "V3167859", name: "Nguyễn Thị Lan Hương", password: "matkhauLanHuong" },
-  { id: "V3113225", name: "Nguyễn Quang Anh", password: "matkhauQuangAnh" },
-  { id: "V3120797", name: "Triệu Thị Lan", password: "matkhauThiLan" },
-];
-
+let employees = [];
 let currentEmployee = null;
+
+// Tải danh sách nhân viên từ file JSON
+async function loadEmployees() {
+  try {
+    const response = await fetch('employees.json');
+    if (!response.ok) throw new Error('Không tìm thấy file employees.json');
+    employees = await response.json();
+    renderEmployees();
+  } catch (err) {
+    document.getElementById("employeeList").innerHTML = 
+      `<div class="error">Lỗi tải danh sách nhân viên: ${err.message}<br>Vui lòng kiểm tra file employees.json có cùng thư mục không.</div>`;
+  }
+}
 
 function renderEmployees() {
   const list = document.getElementById("employeeList");
@@ -204,12 +129,6 @@ function renderEmployees() {
     card.onclick = () => openModal(emp);
     list.appendChild(card);
   });
-  
-  const addCard = document.createElement("div");
-  addCard.className = "employee-card add-btn";
-  addCard.textContent = "Thêm +";
-  addCard.onclick = () => alert("Liên hệ admin để thêm nhân viên mới");
-  list.appendChild(addCard);
 }
 
 function openModal(emp) {
@@ -226,7 +145,6 @@ function closeModal() {
   document.getElementById("modal").style.display = "none";
 }
 
-// Giữ nguyên phần JS fetchSalary, checkPassword như code trước (copy từ code cũ vào đây)
 async function checkPassword() {
   const inputPass = document.getElementById("passwordInput").value.trim();
   const thangInput = document.getElementById("thangInput").value.trim();
@@ -243,7 +161,7 @@ async function checkPassword() {
 
   if (isCurrentMonth) {
     const today = new Date();
-    thangUse = today.getFullYear().toString() + (today.getMonth() + 1).toString().padStart(2, '0');
+    thangUse = today.getFullYear().toString() + String(today.getMonth() + 1).padStart(2, '0');
     thangHienThi = "Tháng hiện tại (" + thangUse.slice(4) + "/" + thangUse.slice(0,4) + ")";
   } else {
     if (!/^\d{6}$/.test(thangInput)) {
@@ -261,12 +179,9 @@ async function fetchSalary(ma, isCurrentMonth, thangUse, thangHienThi) {
   const resultDiv = document.getElementById("salaryResult");
   resultDiv.innerHTML = `<div class="loading">Đang tải lương của <strong>${ma}</strong> – ${thangHienThi}...</div>`;
 
-  let url = "";
-  if (isCurrentMonth) {
-    url = `https://esalary.one-fit.com/VN/Program/QueryReport/AjaxRequest.aspx?key=getsalarybyid&uid=${ma}&_=${Date.now()}`;
-  } else {
-    url = `https://esalary.one-fit.com/VN/Program/QueryReport/AjaxRequest.aspx?key=gethistorysalary&uid=${ma}&dateid=${thangUse}&_=${Date.now()}`;
-  }
+  let url = isCurrentMonth
+    ? `https://esalary.one-fit.com/VN/Program/QueryReport/AjaxRequest.aspx?key=getsalarybyid&uid=${ma}&_=${Date.now()}`
+    : `https://esalary.one-fit.com/VN/Program/QueryReport/AjaxRequest.aspx?key=gethistorysalary&uid=${ma}&dateid=${thangUse}&_=${Date.now()}`;
 
   const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
 
@@ -298,9 +213,7 @@ async function fetchSalary(ma, isCurrentMonth, thangUse, thangHienThi) {
     json.forEach((item, i) => {
       const tien = parseFloat(item.amount || 0);
       const formattedTien = tien.toLocaleString("vi-VN") + " ₫";
-
       const isNetSalary = (item.itemCode === "D002") || (item.salaryDesc && item.salaryDesc.toLowerCase().includes("thực lĩnh"));
-
       const rowClass = isNetSalary ? ' class="net-salary-row"' : '';
 
       table += `
@@ -314,17 +227,18 @@ async function fetchSalary(ma, isCurrentMonth, thangUse, thangHienThi) {
     });
 
     table += `</table>`;
-
     resultDiv.innerHTML = table;
   } catch (err) {
-    resultDiv.innerHTML = `<div class="error">Lỗi kết nối. Thử refresh trang hoặc chờ vài phút.<br>Chi tiết: ${err.message}</div>`;
+    resultDiv.innerHTML = `<div class="error">Lỗi kết nối. Thử lại sau.<br>Chi tiết: ${err.message}</div>`;
   }
 }
 
-document.getElementById("passwordInput").addEventListener("keypress", e => { if (e.key === "Enter") checkPassword(); });
-document.getElementById("thangInput").addEventListener("keypress", e => { if (e.key === "Enter") checkPassword(); });
+// Enter key support
+document.getElementById("passwordInput")?.addEventListener("keypress", e => { if (e.key === "Enter") checkPassword(); });
+document.getElementById("thangInput")?.addEventListener("keypress", e => { if (e.key === "Enter") checkPassword(); });
 
-renderEmployees();
+// Khởi động
+loadEmployees();
 </script>
 </body>
 </html>
