@@ -8,81 +8,167 @@
     * { box-sizing: border-box; }
     body {
       font-family: 'Poppins', sans-serif;
-      max-width: 920px;
+      max-width: 1000px;
       margin: 40px auto;
       padding: 20px;
       background: linear-gradient(135deg, #e0f7fa, #f0f4f8);
       min-height: 100vh;
     }
-    h1 { text-align: center; color: #01579b; margin-bottom: 50px; font-weight: 700; font-size: 2.5rem; }
-    .container {
+    h1 { text-align: center; color: #01579b; margin-bottom: 40px; font-weight: 700; font-size: 2.4rem; }
+
+    .login-container {
       background: rgba(255, 255, 255, 0.25);
       backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 24px;
       padding: 40px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       max-width: 600px;
       margin: 0 auto;
+      transition: opacity 0.4s ease;
     }
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); justify-content: center; align-items: center; animation: fadeIn 0.3s ease; z-index: 1000; }
-    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
-    .modal-content {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 40px;
+
+    .salary-container {
+      display: none;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 24px;
-      width: 90%;
-      max-width: 700px;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-      animation: slideUp 0.4s ease;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
-    @keyframes slideUp { from {transform: translateY(50px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
-    .close { float: right; font-size: 36px; cursor: pointer; color: #fff; opacity: 0.7; }
-    .close:hover { opacity: 1; }
+
+    .close, .back-btn {
+      cursor: pointer;
+      font-size: 32px;
+      color: #01579b;
+      opacity: 0.8;
+      float: right;
+    }
+    .close:hover, .back-btn:hover { opacity: 1; }
+
     input {
       width: 100%; padding: 16px; margin: 16px 0; border: none; border-radius: 12px;
       background: rgba(255, 255, 255, 0.3); font-size: 1.1rem; color: #01579b;
     }
     input::placeholder { color: rgba(1, 87, 155, 0.7); }
+
     button {
-      background: #01579b; color: white; padding: 16px 40px; border: none; border-radius: 12px;
+      background: #01579b; color: white; padding: 16px; border: none; border-radius: 12px;
       font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px;
       width: 100%;
     }
     button:hover { background: #003c72; transform: scale(1.02); }
-    table { width: 100%; border-collapse: separate; border-spacing: 0 10px; margin-top: 20px; }
-    th { background: #01579b; color: white; padding: 16px; text-align: left; font-weight: 600; }
-    td { padding: 16px; background: rgba(255, 255, 255, 0.4); }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 12px;
+      margin-top: 20px;
+      font-size: 1.05rem;
+      table-layout: auto;
+    }
+    th {
+      background: #01579b;
+      color: white;
+      padding: 16px 20px;
+      text-align: left;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    td {
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.45);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 300px; /* giới hạn để tránh quá rộng trên mobile */
+    }
     tr td:first-child { border-radius: 12px 0 0 12px; }
     tr td:last-child { border-radius: 0 12px 12px 0; }
-    .amount { text-align: right; font-weight: 600; color: #c62828; }
-    .info { background: rgba(232, 245, 232, 0.7); padding: 20px; border-radius: 16px; margin: 20px 0; text-align: center; font-size: 1.2rem; font-weight: 600; color: #2e7d32; }
-    .net-salary-row td { background: rgba(200, 230, 201, 0.9) !important; font-weight: 700; font-size: 1.3rem; }
-    .error, .no-data { background: rgba(255, 235, 238, 0.8); color: #c62828; padding: 20px; border-radius: 16px; margin: 20px 0; }
-    .loading { background: rgba(227, 242, 253, 0.8); color: #1565c0; padding: 30px; border-radius: 16px; margin: 20px 0; text-align: center; font-size: 1.2rem; }
+
+    .amount {
+      text-align: right;
+      font-weight: 700;
+      color: #1e88e5; /* thay đỏ bằng xanh dương đậm - bạn có thể đổi thành #2e7d32 (xanh lá) nếu thích */
+    }
+
+    .info {
+      background: rgba(232, 245, 232, 0.7);
+      padding: 20px;
+      border-radius: 16px;
+      margin: 20px 0;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #2e7d32;
+    }
+
+    .net-salary-row td {
+      background: rgba(200, 230, 201, 0.9) !important;
+      font-weight: 800;
+      font-size: 1.28rem;
+    }
+
+    .error, .no-data {
+      background: rgba(255, 235, 238, 0.8);
+      color: #c62828;
+      padding: 20px;
+      border-radius: 16px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .loading {
+      background: rgba(227, 242, 253, 0.8);
+      color: #1565c0;
+      padding: 30px;
+      border-radius: 16px;
+      margin: 20px 0;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
     .note { font-size: 0.95rem; color: #555; margin-top: 10px; text-align: center; }
+
+    @media (max-width: 768px) {
+      body { padding: 15px; }
+      table { font-size: 0.95rem; }
+      td, th { padding: 12px 14px; }
+    }
   </style>
 </head>
 <body>
   <h1>Tra cứu lương OneFit</h1>
 
-  <div class="container">
+  <div class="login-container" id="loginContainer">
     <h2 style="text-align:center; color:#01579b; margin-bottom:30px;">Nhập thông tin để tra cứu</h2>
     <input type="text" id="idInput" placeholder="Nhập mã thẻ nhân viên (ID)">
     <input type="password" id="passwordInput" placeholder="Nhập mật khẩu cá nhân">
     <input type="text" id="thangInput" placeholder="Nhập tháng (YYYYMM) - Để trống nếu xem lương tháng này">
     <div class="note">Nhấn Enter hoặc nút bên dưới để xác nhận</div>
     <button onclick="checkAndFetch()">XÁC NHẬN TRA CỨU</button>
-    <div id="salaryResult" style="margin-top:30px;"></div>
+  </div>
+
+  <div class="salary-container" id="salaryContainer">
+    <span class="back-btn" onclick="backToLogin()">&larr; Quay lại</span>
+    <div id="salaryResult"></div>
   </div>
 
 <script>
+function showSalary() {
+  document.getElementById("loginContainer").style.display = "none";
+  document.getElementById("salaryContainer").style.display = "block";
+}
+
+function backToLogin() {
+  document.getElementById("salaryContainer").style.display = "none";
+  document.getElementById("loginContainer").style.display = "block";
+  document.getElementById("salaryResult").innerHTML = "";
+  // Có thể clear input nếu muốn
+  // document.getElementById("passwordInput").value = "";
+}
+
 async function checkAndFetch() {
   const ma = document.getElementById("idInput").value.trim();
   const inputPass = document.getElementById("passwordInput").value.trim();
@@ -125,7 +211,7 @@ async function checkAndFetch() {
 
     const jsonText = await res.text();
     if (!jsonText || jsonText.trim() === "" || jsonText.toLowerCase().includes("error")) {
-      resultDiv.innerHTML = `<div class="no-data">Không có dữ liệu lương cho ${thangHienThi} (có thể chưa cập nhật hoặc mã/mật khẩu sai)</div>`;
+      resultDiv.innerHTML = `<div class="no-data">Không có dữ liệu lương cho ${thangHienThi} (có thể mã/mật khẩu sai hoặc chưa cập nhật)</div>`;
       return;
     }
 
@@ -135,13 +221,6 @@ async function checkAndFetch() {
       return;
     }
 
-    // Kiểm tra mật khẩu từ dữ liệu trả về (giả sử API trả về password hoặc một field để verify)
-    // Lưu ý: Trong code gốc bạn dùng password từ employees.json.
-    // Vì giờ không có file JSON, ta giả định API trả về thông tin nhân viên đầu tiên có field password hoặc bạn cần điều chỉnh logic verify.
-    // Nếu API không trả password, bạn cần giữ file JSON riêng để verify password trước khi gọi API.
-    // Để đơn giản và bảo mật, mình giữ logic gọi API luôn, và nếu sai pass thì server sẽ trả lỗi (hoặc rỗng).
-    // Nếu cần verify pass client-side, bạn phải có file JSON riêng (nhưng sẽ lộ nếu public).
-
     const nv = json[0];
     const ten = nv.userName || ma;
     const pb = nv.departName || "Không rõ";
@@ -149,7 +228,7 @@ async function checkAndFetch() {
     let table = `
       <div class="info">${ten} • ${ma} • ${pb} • ${thangHienThi}</div>
       <table>
-        <tr><th>STT</th><th>Mã</th><th>Khoản mục</th><th style="text-align:right;">Số tiền</th></tr>
+        <tr><th>STT</th><th>Mã khoản</th><th>Khoản mục</th><th style="text-align:right;">Số tiền</th></tr>
     `;
 
     json.forEach((item, i) => {
@@ -169,15 +248,18 @@ async function checkAndFetch() {
     table += `</table>`;
 
     resultDiv.innerHTML = table;
+    showSalary();  // <-- Ẩn form, hiện bảng lương
   } catch (err) {
-    resultDiv.innerHTML = `<div class="error">Lỗi kết nối hoặc dữ liệu không hợp lệ.<br>Chi tiết: ${err.message}<br>(Có thể mã thẻ/mật khẩu sai hoặc server chưa cập nhật)</div>`;
+    resultDiv.innerHTML = `<div class="error">Lỗi kết nối hoặc dữ liệu không hợp lệ.<br>Chi tiết: ${err.message}</div>`;
   }
 }
 
-// Hỗ trợ Enter để submit
-document.getElementById("idInput")?.addEventListener("keypress", e => { if (e.key === "Enter") checkAndFetch(); });
-document.getElementById("passwordInput")?.addEventListener("keypress", e => { if (e.key === "Enter") checkAndFetch(); });
-document.getElementById("thangInput")?.addEventListener("keypress", e => { if (e.key === "Enter") checkAndFetch(); });
+// Enter để submit
+["idInput", "passwordInput", "thangInput"].forEach(id => {
+  document.getElementById(id)?.addEventListener("keypress", e => {
+    if (e.key === "Enter") checkAndFetch();
+  });
+});
 </script>
 </body>
 </html>
