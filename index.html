@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <title>Tra cứu lương OneFit</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome CDN cho eye icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     * { box-sizing: border-box; }
     body {
@@ -53,6 +55,28 @@
     }
     input::placeholder { color: rgba(1, 87, 155, 0.7); }
 
+    /* Password wrapper với eye icon */
+    .password-wrapper {
+      position: relative;
+      margin: 16px 0;
+    }
+    .password-wrapper input {
+      padding-right: 50px; /* Để chỗ cho icon */
+    }
+    .eye-icon {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 1.4rem;
+      color: #01579b;
+      opacity: 0.7;
+    }
+    .eye-icon:hover {
+      opacity: 1;
+    }
+
     button {
       background: #01579b; color: white; padding: 16px; border: none; border-radius: 12px;
       font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px;
@@ -82,7 +106,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 300px; /* giới hạn để tránh quá rộng trên mobile */
+      max-width: 300px;
     }
     tr td:first-child { border-radius: 12px 0 0 12px; }
     tr td:last-child { border-radius: 0 12px 12px 0; }
@@ -90,7 +114,7 @@
     .amount {
       text-align: right;
       font-weight: 700;
-      color: #1e88e5; /* thay đỏ bằng xanh dương đậm - bạn có thể đổi thành #2e7d32 (xanh lá) nếu thích */
+      color: #1e88e5;
     }
 
     .info {
@@ -144,7 +168,12 @@
   <div class="login-container" id="loginContainer">
     <h2 style="text-align:center; color:#01579b; margin-bottom:30px;">Nhập thông tin để tra cứu</h2>
     <input type="text" id="idInput" placeholder="Nhập mã thẻ nhân viên (ID)">
-    <input type="password" id="passwordInput" placeholder="Nhập mật khẩu cá nhân">
+    
+    <div class="password-wrapper">
+      <input type="password" id="passwordInput" placeholder="Nhập mật khẩu cá nhân">
+      <i class="fas fa-eye-slash eye-icon" id="togglePassword"></i>
+    </div>
+
     <input type="text" id="thangInput" placeholder="Nhập tháng (YYYYMM) - Để trống nếu xem lương tháng này">
     <div class="note">Nhấn Enter hoặc nút bên dưới để xác nhận</div>
     <button onclick="checkAndFetch()">XÁC NHẬN TRA CỨU</button>
@@ -156,18 +185,18 @@
   </div>
 
 <script>
-function showSalary() {
-  document.getElementById("loginContainer").style.display = "none";
-  document.getElementById("salaryContainer").style.display = "block";
-}
+// Toggle show/hide password
+const togglePassword = document.getElementById("togglePassword");
+const passwordInput = document.getElementById("passwordInput");
 
-function backToLogin() {
-  document.getElementById("salaryContainer").style.display = "none";
-  document.getElementById("loginContainer").style.display = "block";
-  document.getElementById("salaryResult").innerHTML = "";
-  // Có thể clear input nếu muốn
-  // document.getElementById("passwordInput").value = "";
-}
+togglePassword.addEventListener("click", function () {
+  const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+  passwordInput.setAttribute("type", type);
+  
+  // Toggle icon
+  this.classList.toggle("fa-eye");
+  this.classList.toggle("fa-eye-slash");
+});
 
 async function checkAndFetch() {
   const ma = document.getElementById("idInput").value.trim();
@@ -248,13 +277,19 @@ async function checkAndFetch() {
     table += `</table>`;
 
     resultDiv.innerHTML = table;
-    showSalary();  // <-- Ẩn form, hiện bảng lương
+    document.getElementById("loginContainer").style.display = "none";
+    document.getElementById("salaryContainer").style.display = "block";
   } catch (err) {
     resultDiv.innerHTML = `<div class="error">Lỗi kết nối hoặc dữ liệu không hợp lệ.<br>Chi tiết: ${err.message}</div>`;
   }
 }
 
-// Enter để submit
+function backToLogin() {
+  document.getElementById("salaryContainer").style.display = "none";
+  document.getElementById("loginContainer").style.display = "block";
+  document.getElementById("salaryResult").innerHTML = "";
+}
+
 ["idInput", "passwordInput", "thangInput"].forEach(id => {
   document.getElementById(id)?.addEventListener("keypress", e => {
     if (e.key === "Enter") checkAndFetch();
